@@ -1,5 +1,7 @@
 package mm.health_data_tracker.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import mm.health_data_tracker.dto.JwtRequest;
 import mm.health_data_tracker.dto.JwtResponse;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "Endpoints for user registration and JWT token generation")
 public class JwtAuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -32,6 +35,7 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping("/authenticate")
+    @Operation(summary = "Authenticate user and receive a JWT Bearer token")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
             throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -45,6 +49,7 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register a new user account")
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto user) throws Exception {
         return ResponseEntity.ok(userDetailsService.save(user));
     }

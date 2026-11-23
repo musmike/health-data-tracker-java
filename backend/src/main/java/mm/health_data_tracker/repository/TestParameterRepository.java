@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface TestParameterRepository extends JpaRepository<TestParameter, Long> {
-    @Query("SELECT p FROM TestParameter p WHERE p.creator IS NULL OR p.creator.username = :username")
+    @Query("SELECT p FROM TestParameter p LEFT JOIN p.creator c WHERE c IS NULL OR c.username = :username")
     List<TestParameter> findSystemAndUserParameters(@Param("username") String username);
 }

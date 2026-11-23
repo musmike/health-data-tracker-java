@@ -1,0 +1,451 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Health Data Tracker API",
+        "description": "Interactive API documentation for Health Data Tracker (MyHealthHub). Manage personal medical test results, test parameters, norms, and user authentication with JWT Bearer tokens.",
+        "contact": {
+            "name": "Health Data Tracker Team"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Endpoints for user registration and JWT token generation"
+        },
+        {
+            "name": "Test Results",
+            "description": "Endpoints for recording, retrieving and managing medical test results"
+        },
+        {
+            "name": "Test Parameters",
+            "description": "Endpoints for managing medical test parameters and reference norms"
+        }
+    ],
+    "paths": {
+        "/api/results/{id}": {
+            "put": {
+                "tags": [
+                    "Test Results"
+                ],
+                "summary": "Update an existing test result value or date",
+                "operationId": "updateResult",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TestResultDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestResultDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Test Results"
+                ],
+                "summary": "Remove a specific test result record",
+                "operationId": "deleteResult",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/parameters/{id}": {
+            "put": {
+                "tags": [
+                    "Test Parameters"
+                ],
+                "summary": "Update an existing custom test parameter",
+                "operationId": "updateParameter",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TestParameterDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestParameterDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Test Parameters"
+                ],
+                "summary": "Delete a custom test parameter and its associated results",
+                "operationId": "deleteParameter",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register a new user account",
+                "operationId": "saveUser",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/authenticate": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Authenticate user and receive a JWT Bearer token",
+                "operationId": "createAuthenticationToken",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JwtRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/results": {
+            "get": {
+                "tags": [
+                    "Test Results"
+                ],
+                "summary": "Retrieve all historical test results for authenticated user",
+                "operationId": "getMyResults",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TestResultDto"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Test Results"
+                ],
+                "summary": "Record a new medical test result with date, value, and parameter",
+                "operationId": "addResult",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TestResultDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestResultDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/parameters": {
+            "get": {
+                "tags": [
+                    "Test Parameters"
+                ],
+                "summary": "Retrieve all accessible test parameters (system norms & user-defined)",
+                "operationId": "getParameters",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TestParameterDto"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Test Parameters"
+                ],
+                "summary": "Define a new custom test parameter with unit and reference ranges",
+                "operationId": "addParameter",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TestParameterDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestParameterDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TestResultDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "value": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "parameterId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "parameterName": {
+                        "type": "string"
+                    },
+                    "parameterUnit": {
+                        "type": "string"
+                    },
+                    "minNorm": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "maxNorm": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "TestParameterDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "unit": {
+                        "type": "string"
+                    },
+                    "minNorm": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "maxNorm": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "privateParam": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "UserDto": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 2147483647,
+                        "minLength": 3
+                    },
+                    "password": {
+                        "type": "string",
+                        "maxLength": 2147483647,
+                        "minLength": 8,
+                        "pattern": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "minLength": 1
+                    }
+                },
+                "required": [
+                    "email",
+                    "password",
+                    "username"
+                ]
+            },
+            "JwtRequest": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "description": "Enter your JWT token in the format: Bearer <token> or just <token>",
+                "name": "BearerAuth",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
